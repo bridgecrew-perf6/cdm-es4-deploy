@@ -1,0 +1,111 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.54"
+    }
+  }
+}
+
+variable "env" {
+  type    = string
+  default = ""
+}
+
+variable "region" {
+  type    = string
+  default = ""
+}
+
+variable "role_partition_ids" {
+  type = map(string)
+  default = {
+    "dev" : "4234234"
+    "stage" : "403453456"
+    "prod" : "656756756" # prod-a
+  }
+}
+
+output "role" {
+  value = var.role_partition_ids[var.env]
+}
+
+variable "provision_region" {
+  type = map(string)
+  default = {
+    "gov-west" = "us-gov-west-1"
+    "gov-east" = "us-gov-east-1"
+  }
+  description = "Region to be used"
+}
+
+output "region" {
+  value = var.provision_region[var.region]
+}
+
+provider "aws" {
+  region     = var.provision_region[var.region]
+  assume_role {
+    role_arn     = "arn:aws-us-gov:iam::${var.role_partition_ids[var.env]}:role/CVLE_Administrator"
+    session_name = "terraform"
+  }
+}
+
+data "aws_vpc" "range_vpc" {
+  filter {
+    name = "tag:Name"
+    values = [
+      "RANGE-VPC"]
+  }
+}
+
+data "aws_subnet" "vpc_range_subnet1" {
+  filter {
+    name = "tag:Name"
+    values = [
+      "RANGE-Private-Subnet-1"]
+  }
+}
+
+output "vpc_range_subnet1" {
+  value = data.aws_subnet.vpc_range_subnet1.cidr_block
+}
+
+
+locals {
+  ami = "ami-0e8ertert912" # CDM ES4 lifecyle time range
+  instance_type = "t3.large"
+  environment = "dev-cdm"
+  name        = "cdm-es4"
+}
+
+
+resource "aws_security_group" "range-cdm-sg" {
+  vpc_id = data.aws_vpc.range_vpc.id
+  name   = "RANGE-CDM-SG"
+
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+
+  tags = {
+    "Name"        = "RANGE-CDM-SG"
+    "Environment" = local.environment
+  }
+}
+
+
+
+// Generated TF Below

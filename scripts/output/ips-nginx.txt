@@ -1,0 +1,33 @@
+location /web/CEAC187612C34A89A9B605D039A05A43 {
+proxy_pass https://172.16.16.100:5601;
+}
+location /web/7403CD4A02C442ADA1991D76B308A208 {
+proxy_pass https://172.16.16.101:5601;
+}
+location /web/9ACFB5DE231A4DC7AA15589BD93B9214 {
+proxy_pass https://172.16.16.102:5601;
+}
+location /web/A68FCF027F8040A79F9CF1795BE69CC5 {
+proxy_pass https://172.16.16.103:5601;
+}
+location /web/75A22DADAE1F4449912BFBD660E94004 {
+proxy_pass https://172.16.16.104:5601;
+}
+location /web/220353F4C55E4B0CA8ED64690A07CD26 {
+proxy_pass https://172.16.16.105:5601;
+}
+location /web/8F3476D13F9E4F5AAFBBF3B4AF0046F6 {
+proxy_pass https://172.16.16.106:5601;
+}
+location /web/B6380EB91D9146E3B8200D3C1E0049F3 {
+proxy_pass https://172.16.16.107:5601;
+}
+location /web/C8E75456E05A4350BA0D3C405AC5E492 {
+proxy_pass https://172.16.16.108:5601;
+}
+location /web/EFEE9F88601E4EFD8B08D079653CB231 {
+proxy_pass https://172.16.16.109:5601;
+}
+location /web/instructor1 {
+proxy_pass https://172.16.16.110:5601;
+}
